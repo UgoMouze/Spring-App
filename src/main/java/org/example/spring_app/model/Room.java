@@ -16,6 +16,9 @@ public class Room {
     @Column(nullable=false)
     private String name;
 
+    @ManyToOne
+    @JoinColumn(nullable = false)
+    private Building building;
     private Double current_temperature;
     private Double target_temperature;
 
@@ -28,7 +31,7 @@ public class Room {
 
     public Room(){
     }
-    public Room(Long id, Integer floor, String name, Double current_temperature, Double target_temperature, Set<Heater> heaters, Set<Window> windows) {
+    public Room(Long id, Integer floor, String name, Double current_temperature, Double target_temperature, Set<Heater> heaters, Set<Window> windows, Building building ) {
         this.id = id;
         this.floor = floor;
         this.name = name;
@@ -36,11 +39,13 @@ public class Room {
         this.target_temperature = target_temperature;
         this.heaters = heaters;
         this.windows = windows;
+        this.building = building;
     }
 
-    public Room(String name, Long id){
+    public Room(String name, Long id, Building building){
         this.id = id;
         this.name = name;
+        this.building= building;
     }
 
     public String getName() {
@@ -62,4 +67,7 @@ public class Room {
     public Long getId() {
         return this.id;
     }
+
+    public Integer getFloor(){return this.floor;}
+    public Building getBuilding(){ return this.building; }
 }

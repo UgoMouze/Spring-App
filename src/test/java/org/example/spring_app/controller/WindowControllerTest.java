@@ -5,6 +5,7 @@ import org.assertj.core.api.Assertions;
 import org.example.spring_app.dao.RoomDao;
 import org.example.spring_app.dao.WindowDao;
 import org.example.spring_app.dto.WindowDto;
+import org.example.spring_app.model.Building;
 import org.example.spring_app.model.Room;
 import org.example.spring_app.model.Window;
 import org.example.spring_app.model.WindowStatus;
@@ -128,7 +129,7 @@ public class WindowControllerTest {
     }
 
     private Window createWindow(String name) {
-        Room room = new Room("S1", 1L);
+        Room room = new Room("S1", 1L, new Building());
         return new Window(name, WindowStatus.OPEN, room);
     }
 }
