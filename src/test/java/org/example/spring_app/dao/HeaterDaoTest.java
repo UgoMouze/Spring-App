@@ -4,7 +4,6 @@ import org.assertj.core.api.Assertions;
 import org.example.spring_app.model.Heater;
 import org.example.spring_app.model.HeaterStatus;
 import org.example.spring_app.model.Room;
-import org.example.spring_app.model.Window;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,7 +30,7 @@ class HeaterDaoTest {
     public void shouldFindAHeater() {
         Heater heater = heaterDao.getReferenceById(-10L);
         Assertions.assertThat(heater.getName()).isEqualTo("Heater1");
-        Assertions.assertThat(heater.getHeaterStatus()).isEqualTo(HeaterStatus.ON);
+        Assertions.assertThat(heater.getHeater_status()).isEqualTo(HeaterStatus.ON);
     }
 
     @Test

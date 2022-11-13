@@ -21,6 +21,6 @@ class RoomDaoTest {
     public void shouldFindARoom() {
         Room room = roomDao.getReferenceById(-10L);
         Assertions.assertThat(room.getName()).isEqualTo("Room1");
-        Assertions.assertThat(room.getCurrentTemperature()).isEqualTo(22.3);
+        Assertions.assertThat(room.getCurrent_temperature()).isEqualTo(22.3);
     }
 }

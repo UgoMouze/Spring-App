@@ -30,13 +30,13 @@ class BuildingDaoTest {
     }
 
     @Test
-    public void shouldFindHeaters() {
+    public void shouldFindWindows() {
         List<Window> windows = buildingDao.findBuildingWindows(-10L);
         Assertions.assertThat(windows).hasSize(4).extracting("id").containsExactly(-10L, -9L, -8L, -7L);
     }
 
     @Test
-    public void shouldFindWindows() {
+    public void shouldFindHeaters() {
         List<Heater> heaters = buildingDao.findBuildingHeaters(-10L);
         Assertions.assertThat(heaters).hasSize(2).extracting("id").containsExactly(-10L, -9L);
     }

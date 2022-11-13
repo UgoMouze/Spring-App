@@ -28,24 +28,50 @@ public class Heater {
 
     }
 
-    public Heater(Long id, String name, Long power, Room room, HeaterStatus status) {
-        this.id = id;
+    public Heater(String name, Long power, Room room, HeaterStatus status) {
         this.name = name;
         this.power = power;
         this.room = room;
         this.heater_status = status;
     }
 
-    public String getName() {
-        return this.name;
-    }
-
-
-    public HeaterStatus getHeaterStatus() {
-        return this.heater_status;
-    }
-
     public Long getId() {
-        return this.id;
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public Long getPower() {
+        return power;
+    }
+
+    public void setPower(Long power) {
+        this.power = power;
+    }
+
+    public Room getRoom() {
+        return room;
+    }
+
+    public void setRoom(Room room) {
+        this.room = room;
+    }
+
+    public HeaterStatus getHeater_status() {
+        return heater_status;
+    }
+
+    public void setHeater_status(HeaterStatus heater_status) {
+        this.heater_status = heater_status;
     }
 }
