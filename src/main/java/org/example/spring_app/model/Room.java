@@ -1,7 +1,6 @@
 package org.example.spring_app.model;
 
 import javax.persistence.*;
-import java.util.Arrays;
 import java.util.Set;
 
 @Entity
