@@ -6,6 +6,7 @@ import org.example.spring_app.dto.WindowDto;
 import org.example.spring_app.model.Room;
 import org.example.spring_app.model.Window;
 import org.example.spring_app.model.WindowStatus;
+import org.springframework.security.access.annotation.Secured;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
@@ -25,16 +26,19 @@ public class WindowController {
         this.roomDao = roomDao;
     }
 
-    @GetMapping // (5)
+    @Secured("ROLE_ADMIN")
+    @GetMapping
     public List<WindowDto> findAll() {
         return windowDao.findAll().stream().map(WindowDto::new).collect(Collectors.toList());  // (6)
     }
 
+    @Secured("ROLE_ADMIN")
     @GetMapping(path = "/{id}")
     public WindowDto findById(@PathVariable Long id) {
         return windowDao.findById(id).map(WindowDto::new).orElse(null); // (7)
     }
 
+    @Secured("ROLE_ADMIN")
     @PutMapping(path = "/{id}/switch")
     public WindowDto switchStatus(@PathVariable Long id) {
         Window window = windowDao.findById(id).orElseThrow(IllegalArgumentException::new);
@@ -42,7 +46,8 @@ public class WindowController {
         return new WindowDto(window);
     }
 
-    @PostMapping // (8)
+    @Secured("ROLE_ADMIN")
+    @PostMapping
     public WindowDto create(@RequestBody WindowDto dto) {
         // WindowDto must always contain the window room
         Room room = roomDao.getReferenceById(dto.getRoomId());
@@ -52,7 +57,7 @@ public class WindowController {
             window = windowDao.save(new Window(dto.getName(), dto.getWindowStatus(), room));
         }
         else {
-            window = windowDao.getReferenceById(dto.getId());  // (9)
+            window = windowDao.getReferenceById(dto.getId());
             window.setWindowStatus(dto.getWindowStatus());
         }
         return new WindowDto(window);

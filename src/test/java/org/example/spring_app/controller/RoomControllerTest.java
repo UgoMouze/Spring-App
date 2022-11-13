@@ -11,6 +11,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
 
 import java.util.List;
@@ -22,6 +23,7 @@ import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.BDDMockito.given;
 import static org.springframework.http.MediaType.APPLICATION_JSON;
 import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
+import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
@@ -43,6 +45,7 @@ public class RoomControllerTest {
     private WindowDao windowDao;
 
     @Test
+    @WithMockUser(username = "admin", roles = "ADMIN")
     void shouldLoadRooms() throws Exception {
         given(roomDao.findAll()).willReturn(List.of(
                 createRoom("room 1"),
@@ -57,6 +60,7 @@ public class RoomControllerTest {
     }
 
     @Test
+    @WithMockUser(username = "admin", roles = "ADMIN")
     void shouldLoadARoomAndReturnNullIfNotFound() throws Exception {
         given(roomDao.findById(999L)).willReturn(Optional.empty());
 
@@ -68,6 +72,7 @@ public class RoomControllerTest {
     }
 
     @Test
+    @WithMockUser(username = "admin", roles = "ADMIN")
     void shouldLoadARoom() throws Exception {
         given(roomDao.findById(999L)).willReturn(Optional.of(createRoom("room 1")));
 
@@ -79,6 +84,7 @@ public class RoomControllerTest {
     }
 
     @Test
+    @WithMockUser(username = "admin", roles = "ADMIN")
     void shouldUpdateRoom() throws Exception {
         Room expectedRoom = createRoom("room 1");
         expectedRoom.setId(1L);
@@ -86,7 +92,7 @@ public class RoomControllerTest {
 
         given(roomDao.getReferenceById(anyLong())).willReturn(expectedRoom);
 
-        mockMvc.perform(post("/api/rooms").content(json).contentType(APPLICATION_JSON_VALUE))
+        mockMvc.perform(post("/api/rooms").content(json).contentType(APPLICATION_JSON_VALUE).with(csrf()))
                 // check the HTTP response
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.name").value("room 1"))
@@ -94,6 +100,7 @@ public class RoomControllerTest {
     }
 
     @Test
+    @WithMockUser(username = "admin", roles = "ADMIN")
     void shouldCreateRoom() throws Exception {
         Room expectedRoom = createRoom("room 1");
         expectedRoom.setId(null);
@@ -101,15 +108,16 @@ public class RoomControllerTest {
 
         given(roomDao.save(any())).willReturn(expectedRoom);
 
-        mockMvc.perform(post("/api/rooms").content(json).contentType(APPLICATION_JSON_VALUE))
+        mockMvc.perform(post("/api/rooms").content(json).contentType(APPLICATION_JSON_VALUE).with(csrf()))
                 // check the HTTP response
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.name").value("room 1"));
     }
 
     @Test
+    @WithMockUser(username = "admin", roles = "ADMIN")
     void shouldDeleteRoom() throws Exception {
-        mockMvc.perform(delete("/api/rooms/999"))
+        mockMvc.perform(delete("/api/rooms/999").with(csrf()))
                 .andExpect(status().isOk());
     }
 

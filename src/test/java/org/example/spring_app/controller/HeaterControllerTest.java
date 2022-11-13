@@ -9,6 +9,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
 
 import java.util.List;
@@ -20,6 +21,7 @@ import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.BDDMockito.given;
 import static org.springframework.http.MediaType.APPLICATION_JSON;
 import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
+import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
@@ -38,6 +40,7 @@ public class HeaterControllerTest {
     private RoomDao roomDao;
 
     @Test
+    @WithMockUser(username = "admin", roles = "ADMIN")
     void shouldLoadHeaters() throws Exception {
         given(heaterDao.findAll()).willReturn(List.of(
                 createHeater("heater 1"),
@@ -52,6 +55,7 @@ public class HeaterControllerTest {
     }
 
     @Test
+    @WithMockUser(username = "admin", roles = "ADMIN")
     void shouldLoadAHeaterAndReturnNullIfNotFound() throws Exception {
         given(heaterDao.findById(999L)).willReturn(Optional.empty());
 
@@ -63,6 +67,7 @@ public class HeaterControllerTest {
     }
 
     @Test
+    @WithMockUser(username = "admin", roles = "ADMIN")
     void shouldLoadAHeater() throws Exception {
         given(heaterDao.findById(999L)).willReturn(Optional.of(createHeater("heater 1")));
 
@@ -74,6 +79,7 @@ public class HeaterControllerTest {
     }
 
     @Test
+    @WithMockUser(username = "admin", roles = "ADMIN")
     void shouldUpdateHeater() throws Exception {
         Heater expectedHeater = createHeater("heater 1");
         expectedHeater.setId(1L);
@@ -82,7 +88,7 @@ public class HeaterControllerTest {
         given(roomDao.getReferenceById(anyLong())).willReturn(expectedHeater.getRoom());
         given(heaterDao.getReferenceById(anyLong())).willReturn(expectedHeater);
 
-        mockMvc.perform(post("/api/heaters").content(json).contentType(APPLICATION_JSON_VALUE))
+        mockMvc.perform(post("/api/heaters").content(json).contentType(APPLICATION_JSON_VALUE).with(csrf()))
                 // check the HTTP response
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.name").value("heater 1"))
@@ -90,6 +96,7 @@ public class HeaterControllerTest {
     }
 
     @Test
+    @WithMockUser(username = "admin", roles = "ADMIN")
     void shouldCreateHeater() throws Exception {
         Heater expectedHeater = createHeater("heater 1");
         expectedHeater.setId(null);
@@ -98,15 +105,16 @@ public class HeaterControllerTest {
         given(roomDao.getReferenceById(anyLong())).willReturn(expectedHeater.getRoom());
         given(heaterDao.save(any())).willReturn(expectedHeater);
 
-        mockMvc.perform(post("/api/heaters").content(json).contentType(APPLICATION_JSON_VALUE))
+        mockMvc.perform(post("/api/heaters").content(json).contentType(APPLICATION_JSON_VALUE).with(csrf()))
                 // check the HTTP response
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.name").value("heater 1"));
     }
 
     @Test
+    @WithMockUser(username = "admin", roles = "ADMIN")
     void shouldDeleteHeater() throws Exception {
-        mockMvc.perform(delete("/api/heaters/999"))
+        mockMvc.perform(delete("/api/heaters/999").with(csrf()))
                 .andExpect(status().isOk());
     }
 

@@ -8,6 +8,7 @@ import org.example.spring_app.dto.HeaterDto;
 import org.example.spring_app.dto.RoomDto;
 import org.example.spring_app.dto.WindowDto;
 import org.example.spring_app.model.*;
+import org.springframework.security.access.annotation.Secured;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
@@ -32,11 +33,13 @@ public class RoomController {
         this.heaterDao = heaterDao;
     }
 
+    @Secured("ROLE_ADMIN")
     @GetMapping
     public List<RoomDto> findAll(){
         return roomDao.findAll().stream().map(RoomDto::new).collect(Collectors.toList());
     }
 
+    @Secured("ROLE_ADMIN")
     @PostMapping
     public RoomDto create(@RequestBody RoomDto dto){
         Building building = buildingDao.getReferenceById(dto.getBuildingId());
@@ -51,12 +54,13 @@ public class RoomController {
         }
         return new RoomDto(room);
     }
-
+    @Secured("ROLE_ADMIN")
     @GetMapping(path = "/{id}")
     public RoomDto findById(@PathVariable Long id) {
         return roomDao.findById(id).map(RoomDto::new).orElse(null);
     }
 
+    @Secured("ROLE_ADMIN")
     @DeleteMapping(path = "/{id}")
     public void delete(@PathVariable Long id) {
         RoomDto roomdto = roomDao.findById(id).map(RoomDto::new).orElse(null);
@@ -67,6 +71,7 @@ public class RoomController {
         roomDao.deleteById(id);
     }
 
+    @Secured("ROLE_ADMIN")
     @PutMapping(path = "{id}/switchWindow")
     public RoomDto switchWindows(@PathVariable Long id){
         Room room = roomDao.findById(id).orElseThrow(IllegalArgumentException::new);
@@ -74,6 +79,7 @@ public class RoomController {
         return new RoomDto(room);
     }
 
+    @Secured("ROLE_ADMIN")
     @PutMapping(path = "{id}/switchHeater")
     public RoomDto switchHeaters(@PathVariable Long id){
         Room room = roomDao.findById(id).orElseThrow(IllegalArgumentException::new);

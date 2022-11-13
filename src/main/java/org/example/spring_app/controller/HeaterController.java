@@ -6,6 +6,7 @@ import org.example.spring_app.dao.RoomDao;
 import org.example.spring_app.dto.HeaterDto;
 import org.example.spring_app.model.Heater;
 import org.example.spring_app.model.Room;
+import org.springframework.security.access.annotation.Secured;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
@@ -25,12 +26,12 @@ public class HeaterController {
         this.heaterDao = heaterDao;
         this.roomDao = roomDao;
     }
-
+    @Secured("ROLE_ADMIN")
     @GetMapping
     public List<HeaterDto> findAll() {
         return heaterDao.findAll().stream().map(HeaterDto::new).collect(Collectors.toList());
     }
-
+    @Secured("ROLE_ADMIN")
     @PostMapping
     public HeaterDto create(@RequestBody HeaterDto dto) {
         Room room = roomDao.getReferenceById(dto.getRoomId());
@@ -45,10 +46,13 @@ public class HeaterController {
         }
         return new HeaterDto(heater);
     }
+    @Secured("ROLE_ADMIN")
     @GetMapping(path = "/{id}")
     public HeaterDto findById(@PathVariable Long id) {
         return heaterDao.findById(id).map(HeaterDto::new).orElse(null);
     }
+
+    @Secured("ROLE_ADMIN")
 
     @DeleteMapping(path = "/{id}")
     public void delete(@PathVariable Long id) {
