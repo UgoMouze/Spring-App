@@ -2,6 +2,7 @@ package org.example.spring_app.dto;
 
 import org.example.spring_app.model.Room;
 
+import java.util.HashSet;
 import java.util.Set;
 
 public class RoomDto {
@@ -26,9 +27,9 @@ public class RoomDto {
         this.buildingId = room.getBuilding().getId();
         this.current_temperature = room.getCurrent_temperature();
         this.target_temperature = room.getTarget_temperature();
-        this.heaterIds = null;
+        this.heaterIds = new HashSet<Long>();
         if(room.getHeaters() != null ) room.getHeaters().forEach((heater) -> heaterIds.add(heater.getId()));
-        this.windowIds = null;
+        this.windowIds = new HashSet<Long>();
         if(room.getWindows() != null ) room.getWindows().forEach((window)-> windowIds.add(window.getId()));
     }
 
