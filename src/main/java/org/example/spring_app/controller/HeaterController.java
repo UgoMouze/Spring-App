@@ -5,6 +5,7 @@ import org.example.spring_app.dao.HeaterDao;
 import org.example.spring_app.dao.RoomDao;
 import org.example.spring_app.dto.HeaterDto;
 import org.example.spring_app.model.Heater;
+import org.example.spring_app.model.HeaterStatus;
 import org.example.spring_app.model.Room;
 import org.springframework.security.access.annotation.Secured;
 import org.springframework.transaction.annotation.Transactional;
@@ -44,6 +45,14 @@ public class HeaterController {
             heater = heaterDao.getReferenceById(dto.getId());
             heater.setHeater_status(dto.getHeaterStatus());
         }
+        return new HeaterDto(heater);
+    }
+    @Secured("ROLE_ADMIN")
+
+    @PutMapping(path = "/{id}/switch")
+    public HeaterDto switchStatus(@PathVariable Long id) {
+        Heater heater = heaterDao.findById(id).orElseThrow(IllegalArgumentException::new);
+        heater.setHeater_status(heater.getHeater_status() == HeaterStatus.ON ? HeaterStatus.OFF: HeaterStatus.ON);
         return new HeaterDto(heater);
     }
     @Secured("ROLE_ADMIN")

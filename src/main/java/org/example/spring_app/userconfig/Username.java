@@ -1,4 +1,4 @@
-package org.example.spring_app.User;
+package org.example.spring_app.userconfig;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.annotation.Secured;

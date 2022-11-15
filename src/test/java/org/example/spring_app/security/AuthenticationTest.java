@@ -2,7 +2,7 @@ package org.example.spring_app.security;
 
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import org.example.spring_app.User.Username;
+import org.example.spring_app.userconfig.Username;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
