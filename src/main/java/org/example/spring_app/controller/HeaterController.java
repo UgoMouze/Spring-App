@@ -4,8 +4,8 @@ package org.example.spring_app.controller;
 import org.example.spring_app.dao.HeaterDao;
 import org.example.spring_app.dao.RoomDao;
 import org.example.spring_app.dto.HeaterDto;
-import org.example.spring_app.model.Heater;
-import org.example.spring_app.model.Room;
+import org.example.spring_app.dto.WindowDto;
+import org.example.spring_app.model.*;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
@@ -45,6 +45,14 @@ public class HeaterController {
         }
         return new HeaterDto(heater);
     }
+
+    @PutMapping(path = "/{id}/switch")
+    public HeaterDto switchStatus(@PathVariable Long id) {
+        Heater heater = heaterDao.findById(id).orElseThrow(IllegalArgumentException::new);
+        heater.setHeater_status(heater.getHeater_status() == HeaterStatus.ON ? HeaterStatus.OFF: HeaterStatus.ON);
+        return new HeaterDto(heater);
+    }
+
     @GetMapping(path = "/{id}")
     public HeaterDto findById(@PathVariable Long id) {
         return heaterDao.findById(id).map(HeaterDto::new).orElse(null);

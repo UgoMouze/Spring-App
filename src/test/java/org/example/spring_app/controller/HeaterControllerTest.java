@@ -1,6 +1,7 @@
 package org.example.spring_app.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import org.assertj.core.api.Assertions;
 import org.example.spring_app.dao.HeaterDao;
 import org.example.spring_app.dao.RoomDao;
 import org.example.spring_app.dto.HeaterDto;
@@ -102,6 +103,19 @@ public class HeaterControllerTest {
                 // check the HTTP response
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.name").value("heater 1"));
+    }
+    @Test
+    void shouldSwitchHeater() throws Exception {
+        Heater expectedHeater = createHeater("heater 1");
+        Assertions.assertThat(expectedHeater.getHeater_status()).isEqualTo(HeaterStatus.ON);
+
+        given(heaterDao.findById(999L)).willReturn(Optional.of(expectedHeater));
+
+        mockMvc.perform(put("/api/heaters/999/switch").accept(APPLICATION_JSON))
+                // check the HTTP response
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.name").value("heater 1"))
+                .andExpect(jsonPath("$.heaterStatus").value("OFF"));
     }
 
     @Test
