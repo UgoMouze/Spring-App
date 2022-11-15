@@ -62,7 +62,7 @@ public class RoomController {
         RoomDto roomdto = roomDao.findById(id).map(RoomDto::new).orElse(null);
         if(roomdto != null){
             if(roomdto.getWindowIds() != null) roomdto.getWindowIds().forEach((idw)->windowDao.deleteById(idw));
-            if(roomdto.getHeaterIds() != null)roomdto.getHeaterIds().forEach((idh)->heaterDao.deleteById(idh));
+            if(roomdto.getHeaterIds() != null) roomdto.getHeaterIds().forEach((idh)->heaterDao.deleteById(idh));
         }
         roomDao.deleteById(id);
     }
